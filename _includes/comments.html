@@ -1,38 +1,38 @@
-<section class="post-comments">
-  {% if site.comment.disqus %}
-    <div id="disqus_thread"></div>
-    <script>
-    
-    var disqus_config = function () {
-        this.page.url = "{{ page.url | prepend: site.baseurl | prepend: site.url }}";
-        this.page.identifier = "{{ page.url }}";
-    };
+{% if page.comments != false %}
+  {% case site.comments_provider %}
+    {% when 'disqus' %}
+      {% if site.disqus_username %}
+        {% assign load_disqus = true %}
+        <!-- Disqus Protection, see https://github.com/mzlogin/mzlogin.github.io/issues/2 -->
+        {% if site.disqus_username == 'mzlogin' %}
+          {% assign load_disqus = false %}
+          {% if site.url contains 'mazhuang.org' %}
+            {% assign load_disqus = true %}
+          {% endif %}
+        {% endif %}
+        {% if load_disqus %}
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url = '{{ site.url }}{{ page.url }}';
+              this.page.identifier = '{{ page.url }}';
+              this.page.title = '{{ page.title }}';
+            };
+            (function() { // DON'T EDIT BELOW THIS LINE
+              var d = document, s = d.createElement('script');
 
-    var disqus_shortname = '{{ site.comment.disqus }}';
-    
-    (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
-    </script>
-    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
-    
-  {% elsif site.comment.duoshuo %}
-    <div class="ds-thread" data-thread-key="{{ page.url }}" data-title="{{ page.title }}" data-url="{{ page.url | prepend: site.baseurl | prepend: site.url }}"></div>
-    <script type="text/javascript">
-        var duoshuoQuery = {short_name:"{{ site.comment.duoshuo }}"};
-        (function() {
-            var ds = document.createElement('script');
-            ds.type = 'text/javascript';ds.async = true;
-            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-            ds.charset = 'UTF-8';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-        })();
-    </script>
-  {% endif %}
-  
-  
-  
-</section>
+              s.type = 'text/javascript';
+              s.async = true;
+              var shortname = '{{ site.disqus_username }}';
+
+              s.src = '//' + shortname + '.disqus.com/embed.js';
+
+              s.setAttribute('data-timestamp', +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        {% endif %}
+      {% endif %}
+  {% endcase %}
+{% endif %}
