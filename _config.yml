@@ -1,9 +1,9 @@
 # Basic
 title: 吃饱等饿
 subtitle: 深度学习
-welcome_message: <a href="https://github.com/onevcat/vno-jekyll" target="_blank">欢迎</a>
-description: Vno Jekyll is a port of my Ghost theme vno.
-creator: <a href="http://onev.cat">@onevcat</a>
+welcome_message: <a href="https://github.com/dingtim/docker-library" target="_blank">欢迎</a>
+description: 来自互联网.
+creator: <a href="http://dingtim.github.io">@dingtim/a>
 
 url: "http://dingtim.github.io"
 
@@ -17,12 +17,12 @@ cover_color: red
 
 # The blog button should not be removed.
 blog_button:
-    title: Blog
-    description: Visit blog
+    title: 博客
+    description: 吃饱等饿的博客
 
 # Navigation buttons in the front page.
 nav:
-    - {title: Projects, description: My Projects, url: 'http://dingtim.github.io'}
+    - {title: 项目, description: 我的项目, url: 'http://dingtim.github.io'}
     # - {title: Another Button, description: A button, url: 'http://example.com'}
 
 # Pagination
