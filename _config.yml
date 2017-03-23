@@ -16,13 +16,12 @@ side_bar_repo_limit: 5
 # ---------------- #
 #      Author      #
 # ---------------- #
-author: Ding timezone
+author: Ding tim
 organization: DNA, Inc.
 organization_url: https://www.cpsdna.com
 github_username: dingtim
 location: Nanjing, China
 email: dingtim@gmail.com
-
 # ---------------- #
 #    Navigation    #
 # ---------------- #
@@ -79,7 +78,6 @@ collections:
         permalink: /wiki/:path/
 
 repository: dingtim/dingtim.github.io
-
 # ---------------- #
 #      Comments    #
 # ---------------- #
