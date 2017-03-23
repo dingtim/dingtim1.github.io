@@ -1,7 +1,6 @@
-# ---------------- #
 #   Main Configs   #
-# ---------------- #
-baseurl:
+
+baseurl: 
 url: http://dingtim.github.io
 date_format: "ordinal"
 title: 吃饱等饿
