@@ -14,11 +14,15 @@ keywords: Kubernetes
 
 1、 禁用rbd features
 	rbd image有4个 features，layering, exclusive-lock, object-map, fast-diff, deep-flatten
+	
 因为目前内核仅支持layering，修改默认配置
 每个ceph node的/etc/ceph/ceph.conf 添加一行
+
 rbd_default_features = 1
+
 这样之后创建的image 只有这一个feature
 验证方式：
+
 ceph --show-config|grep rbd|grep features
 rbd_default_features = 1
 
