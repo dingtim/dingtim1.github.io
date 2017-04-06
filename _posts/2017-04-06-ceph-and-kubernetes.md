@@ -18,7 +18,7 @@ keywords: Kubernetes
 因为目前内核仅支持layering，修改默认配置
 每个ceph node的/etc/ceph/ceph.conf 添加一行
 
-rbd_default_features = 1
+  rbd_default_features = 1
 
 这样之后创建的image 只有这一个feature
 验证方式：
@@ -33,16 +33,18 @@ rbd_default_features = 1
 AQBRIaFYqWT8AhAAUtmJgeNFW/o1ylUzssQQhA==
 
 	# echo "AQBRIaFYqWT8AhAAUtmJgeNFW/o1ylUzssQQhA=="|base64
-QVFCUklhRllxV1Q4QWhBQVV0bUpnZU5GVy9vMXlsVXpzc1FRaEE9PQo=
-创建ceph-secret.yaml文件，data下的key字段值即为上面得到的编码值：
+  QVFCUklhRllxV1Q4QWhBQVV0bUpnZU5GVy9vMXlsVXpzc1FRaEE9PQo=
+  
+  创建ceph-secret.yaml文件，data下的key字段值即为上面得到的编码值：
 
-apiVersion: v1
-kind: Secret
-metadata:
-  name: ceph-secret
-data:
-  key: QVFCUklhRllxV1Q4QWhBQVV0bUpnZU5GVy9vMXlsVXpzc1FRaEE9PQo=
-创建ceph-secret:
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: ceph-secret
+  data:
+    key: QVFCUklhRllxV1Q4QWhBQVV0bUpnZU5GVy9vMXlsVXpzc1FRaEE9PQo=
+  
+  创建ceph-secret:
 
 	# kubectl create -f ceph-secret.yamlsecret "ceph-secret" created
 	# kubectl get secret
