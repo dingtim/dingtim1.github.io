@@ -37,12 +37,12 @@ AQBRIaFYqWT8AhAAUtmJgeNFW/o1ylUzssQQhA==
   
   创建ceph-secret.yaml文件，data下的key字段值即为上面得到的编码值：
 
-  apiVersion: v1
-  kind: Secret
-  metadata:
-    name: ceph-secret
-  data:
-    key: QVFCUklhRllxV1Q4QWhBQVV0bUpnZU5GVy9vMXlsVXpzc1FRaEE9PQo=
+  >apiVersion: v1
+  >kind: Secret
+  >metadata:
+   > name: ceph-secret
+  >data:
+   > key: QVFCUklhRllxV1Q4QWhBQVV0bUpnZU5GVy9vMXlsVXpzc1FRaEE9PQo=
   
   创建ceph-secret:
 
