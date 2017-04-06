@@ -65,33 +65,34 @@ rbd image 'jdk-image':
 创建jdk-pv.yaml:
 monitors: 就是ceph的mon，有几个写几个
 
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: jdk-pv
-spec:
-  capacity:
-    storage: 2Gi
-  accessModes:
-    - ReadWriteOnce
-  rbd:
-    monitors:
-      - 192.168.200.15:6789
-      - 192.168.200.1:6789
-      - 192.168.200.2:6789
-    pool: rbd
-    image: jdk-image
-    user: admin
-    secretRef:
-      name: ceph-secret
-    fsType: xfs
-    readOnly: false
-  persistentVolumeReclaimPolicy: Recycle
+	apiVersion: v1
+	kind: PersistentVolume
+	metadata:
+  		name: jdk-pv
+	spec:
+  		capacity:
+    		storage: 2Gi
+  		accessModes:
+    		- ReadWriteOnce
+  	rbd:
+  	  monitors:
+  	    - 192.168.200.15:6789
+  	    - 192.168.200.1:6789
+		 - 192.168.200.2:6789
+    	pool: rbd
+   	 image: jdk-image
+   	 user: admin
+    	secretRef:
+     		 name: ceph-secret
+   	 fsType: xfs
+	    readOnly: false
+  		persistentVolumeReclaimPolicy: Recycle
 执行创建操作：
 
 	# kubectl create -f jdk-pv.yamlpersistentvolume "jdk-pv" created
-	#kubectl get pv
+	# kubectl get pv
 NAME      CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS      CLAIM      REASON    AGE
+
 ceph-pv   1Gi        RWO           Recycle         Bound       default/ceph-claim   1d
 jdk-pv    2Gi        RWO           Recycle         Available            1m
 3.3 创建pvc
@@ -116,28 +117,28 @@ ceph-claim   Bound     ceph-pv   1Gi    RWO       2d
 jdk-claim    Bound     jdk-pv    2Gi    RWO       39s
 
 5 创建挂载ceph rbd的pod:
-创建 ceph-busyboxpod.yaml 
+	vi ceph-busyboxpod.yaml 
 
-apiVersion: v1
-kind: Pod
-metadata:
-  name: ceph-busybox
-spec:
-  containers:
-  - name: ceph-busybox
-    image: busybox
-    command: ["sleep", "600000"]
-    volumeMounts:
-    - name: ceph-vol1
-      mountPath: /usr/share/busybox
-      readOnly: false
-  volumes:
-  - name: ceph-vol1
-    persistentVolumeClaim:
-      claimName: jdk-claim
+	apiVersion: v1
+	kind: Pod
+	metadata:
+  		name: ceph-busybox
+		spec:
+  		containers:
+  		- name: ceph-busybox
+    	image: busybox
+    		command: ["sleep", "600000"]
+    		volumeMounts:
+    			- name: ceph-vol1
+      			mountPath: /usr/share/busybox
+      		readOnly: false
+  			volumes:
+  				- name: ceph-vol1
+    		persistentVolumeClaim:
+     		 claimName: jdk-claim
 执行创建操作：
 
-kubectl create -f ceph-busyboxpod.yaml
+	kubectl create -f ceph-busyboxpod.yaml
 
 
 
