@@ -18,45 +18,45 @@ keywords: Kubernetes
 ### 安装Docker 1.12
 Kubernetes 1.6还没有针对docker 1.13和最新的docker 17.03上做测试和验证，所以这里安装Kubernetes官方推荐的Docker 1.12版本。
 
-`yum install -y yum-utils`
-`	`
-`	yum-config-manager --add-repo https://docs.docker.com/v1.13/engine/installation/linux/repo\_files/centos/docker.repo`
-`	yum makecache fast`
+	yum install -y yum-utils
+		
+		yum-config-manager --add-repo https://docs.docker.com/v1.13/engine/installation/linux/repo\_files/centos/docker.repo
+		yum makecache fast
 
 查看版本：
 
-yum list docker-engine.x86\_64  --showduplicates |sort -r
-docker-engine.x86\_64             1.13.1-1.el7.centos                 docker-main
-docker-engine.x86\_64             1.12.6-1.el7.centos                 docker-main
-docker-engine.x86\_64             1.11.2-1.el7.centos                 docker-main
+	yum list docker-engine.x86\_64  --showduplicates |sort -r
+	docker-engine.x86\_64             1.13.1-1.el7.centos                 docker-main
+	docker-engine.x86\_64             1.12.6-1.el7.centos                 docker-main
+	docker-engine.x86\_64             1.11.2-1.el7.centos                 docker-main
 
 #### 安装1.12.6：
-yum install -y docker-engine-1.12.6
-
-systemctl start docker
-systemctl enable docker
+	yum install -y docker-engine-1.12.6
+	
+	systemctl start docker
+	systemctl enable docker
 
 #### 系统配置
 根据官方文档Installing Kubernetes on Linux with kubeadm中的Limitations小节中的内容，对各节点系统做如下设置:
 
 创建/etc/sysctl.d/k8s.conf文件，添加如下内容：
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
+	net.bridge.bridge-nf-call-ip6tables = 1
+	net.bridge.bridge-nf-call-iptables = 1
 
 执行sysctl -p /etc/sysctl.d/k8s.conf使修改生效。
 
 在/etc/hostname中修改各节点的hostname，在/etc/hosts中设置hostname对应非lo回环网卡ip:
-
-192.168.253.200 iov-253-200.supower.tech
-192.168.253.202 iov-253-202.supower.tech
-192.168.253.203 iov-253-203.supower.tech
+	
+	192.168.253.200 iov-253-200.supower.tech
+	192.168.253.202 iov-253-202.supower.tech
+	192.168.253.203 iov-253-203.supower.tech
 
 #### 创建本地安装包
 从kubernetes下载最新RPM包生成工具
 
-git clone https://github.com/kubernetes/release.git
-cd  release/rpm/
-sh docker-build.sh
+git clone https://github.com/kubernetes/release.git     
+cd  release/rpm/      
+sh docker-build.sh    
 该脚本生成4个rpm安装包，release/rpm/output/x86\_64/  
 kubeadm-1.6.1-0.x86\_64.rpm 
 kubectl-1.6.1-0.x86\_64.rpm  
