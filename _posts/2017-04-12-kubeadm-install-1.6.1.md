@@ -11,17 +11,17 @@ keywords: Kubernetes
 ## 使用kubeadm安装Kubernetes 1.6
 
 ### 环境准备
-192.168.253.200 iov-253-200.supower.tech
-192.168.253.202 iov-253-202.supower.tech
-192.168.253.203 iov-253-203.supower.tech
+	192.168.253.200 iov-253-200.supower.tech
+	192.168.253.202 iov-253-202.supower.tech
+	192.168.253.203 iov-253-203.supower.tech
 
 ### 安装Docker 1.12
 Kubernetes 1.6还没有针对docker 1.13和最新的docker 17.03上做测试和验证，所以这里安装Kubernetes官方推荐的Docker 1.12版本。
 
-yum install -y yum-utils
-
-yum-config-manager --add-repo https://docs.docker.com/v1.13/engine/installation/linux/repo\_files/centos/docker.repo
-yum makecache fast
+`yum install -y yum-utils`
+`	`
+`	yum-config-manager --add-repo https://docs.docker.com/v1.13/engine/installation/linux/repo\_files/centos/docker.repo`
+`	yum makecache fast`
 
 查看版本：
 
@@ -197,7 +197,7 @@ spec:
 **注意**到kube-apiserver的选项--insecure-port=0，也就是说kubeadm 1.6.0初始化的集群，kube-apiserver没有监听默认的http 8080端口。所以我们使用kubectl get nodes会报The connection to the server localhost:8080 was refused - did you specify the right host or port?。
 查看kube-apiserver的监听端口可以看到只监听了https的6443端口，
 1.	netstat -nltp | grep apiserver
-2.	tcp6       0      0 :6443                 :\*                    LISTEN      9831/kube-apiserver
+2.	tcp6       0      0 :::6443                 :::\*                    LISTEN      9831/kube-apiserver
 为了使用kubectl访问apiserver，在/.bash\_profile中追加下面的环境变量：
 export KUBECONFIG=/etc/kubernetes/admin.conf
 source /.bash\_profile
