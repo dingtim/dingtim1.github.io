@@ -261,7 +261,7 @@ kubectl delete deploy curl
 向集群中添加节点
 
 下面将iov-253-202.supower.tech和iov-253-203.supower.tech加入集群，分别在iov-253-202.supower.tech和iov-253-203.supower.tech上执行：
-`kubeadm join --token e7986d.e440de5882342711 192.168.253.200:6443`
+	kubeadm join --token e7986d.e440de5882342711 192.168.253.200:6443
 	[kubeadm] WARNING: kubeadm is in beta, please do not use it for production clusters.
 	[preflight] Running pre-flight checks
 	[discovery] Trying to connect to API Server "192.168.253.200:6443"
@@ -280,8 +280,9 @@ kubectl delete deploy curl
 	Kubelet informed of new secure connection details.
 	
 	Run 'kubectl get nodes' on the master to see this machine join.
+	
+查看集群中节点：   
 
-查看集群中节点：
 	kubectl get nodes
 	NAME      STATUS    AGE       VERSION
 	iov-253-200.supower.tech     Ready     12m       v1.6.1
