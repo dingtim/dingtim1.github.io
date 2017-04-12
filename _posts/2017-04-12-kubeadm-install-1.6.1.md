@@ -10,53 +10,63 @@ keywords: Kubernetes
 
 使用kubeadm安装Kubernetes 1.6
 
-环境准备
-1.	192.168.253.200 iov-253-200.supower.tech
-2.	192.168.253.202 iov-253-202.supower.tech
-3.	192.168.253.203 iov-253-203.supower.tech
-安装Docker 1.12
+### 环境准备
+192.168.253.200 iov-253-200.supower.tech
+192.168.253.202 iov-253-202.supower.tech
+192.168.253.203 iov-253-203.supower.tech
+
+### 安装Docker 1.12
 Kubernetes 1.6还没有针对docker 1.13和最新的docker 17.03上做测试和验证，所以这里安装Kubernetes官方推荐的Docker 1.12版本。
-1.	yum install -y yum-utils
-2.	
-3.	yum-config-manager \\
-4.	    --add-repo \\
-5.	    https://docs.docker.com/v1.13/engine/installation/linux/repo_files/centos/docker.repo
-6.	
-7.	yum makecache fast
+yum install -y yum-utils
+yum-config-manager --add-repo https://docs.docker.com/v1.13/engine/installation/linux/repo_files/centos/docker.repo
+
+yum makecache fast
+
 查看版本：
-1.	yum list docker-engine.x86_64  --showduplicates |sort -r
-2.	docker-engine.x86_64             1.13.1-1.el7.centos                 docker-main
-3.	docker-engine.x86_64             1.12.6-1.el7.centos                 docker-main
-4.	docker-engine.x86_64             1.11.2-1.el7.centos                 docker-main
-安装1.12.6：
-1.	yum install -y docker-engine-1.12.6
-2.	
-3.	systemctl start docker
-4.	systemctl enable docker
-系统配置
+
+yum list docker-engine.x86_64  --showduplicates |sort -r
+docker-engine.x86_64             1.13.1-1.el7.centos                 docker-main
+docker-engine.x86_64             1.12.6-1.el7.centos                 docker-main
+docker-engine.x86_64             1.11.2-1.el7.centos                 docker-main
+
+#### 安装1.12.6：
+yum install -y docker-engine-1.12.6
+
+systemctl start docker
+systemctl enable docker
+
+#### 系统配置
 根据官方文档Installing Kubernetes on Linux with kubeadm中的Limitations小节中的内容，对各节点系统做如下设置:
+
 创建/etc/sysctl.d/k8s.conf文件，添加如下内容：
-1.	net.bridge.bridge-nf-call-ip6tables = 1
-2.	net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+
 执行sysctl -p /etc/sysctl.d/k8s.conf使修改生效。
+
 在/etc/hostname中修改各节点的hostname，在/etc/hosts中设置hostname对应非lo回环网卡ip:
-1.	192.168.253.200 iov-253-200.supower.tech
-2.	192.168.253.202 iov-253-202.supower.tech
-3.	192.168.253.203 iov-253-203.supower.tech
-安装kubeadm和kubelet
+
+192.168.253.200 iov-253-200.supower.tech
+192.168.253.202 iov-253-202.supower.tech
+192.168.253.203 iov-253-203.supower.tech
+
+#### 安装kubeadm和kubelet
+
 下面在各节点安装kubeadm和kubelet：
-1.	cat \<\<EOF \> /etc/yum.repos.d/kubernetes.repo
-2.	[kubernetes](#)
-3.	name=Kubernetes
-4.	baseurl=http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
-5.	enabled=1
-6.	gpgcheck=1
-7.	repo_gpgcheck=1
-8.	gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
-9.	        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-10.	EOF
+cat \<\<EOF \> /etc/yum.repos.d/kubernetes.repo
+
+name=Kubernetes
+baseurl=http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
 测试地址http://yum.kubernetes.io/repos/kubernetes-el7-x86_64是否可用，如果不可用需要科学上网。
-1.	 curl http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
+
+ curl http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
+
 查看kubeadm, kubelet, kubectl, kubernets-cni的最新版本：
 1.	yum list kubeadm  --showduplicates |sort -r
 2.	kubeadm.x86_64                        1.6.1-0                        kubernetes
