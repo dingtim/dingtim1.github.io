@@ -175,6 +175,7 @@ Master Node初始化完成，使用kubeadm初始化的Kubernetes集群在Master�
 在/etc/kubernetes/manifests/目录里可以看到kube-apiserver,kube-scheduler, kube-controller-manager的定义文件。另外集群持久化存储etcd也是以单点静态Pod的形式运行的，对于etcd后边我们会把它切换成etcd集群，这里暂且不表。
 
 查看一下kube-apiserver.yaml的内容：
+
 	  apiVersion: v1
 	  kind: Pod
 	metadata:
@@ -187,17 +188,20 @@ Master Node初始化完成，使用kubeadm初始化的Kubernetes集群在Master�
 	spec:
 	  containers:
 	command:
-		kube-apiserver
-		  …….
-		--insecure-port=0
+	kube-apiserver
+	  …….
+	--insecure-port=0
 	
-**注意**到kube-apiserver的选项--insecure-port=0，也就是说kubeadm 1.6.0初始化的集群，kube-apiserver没有监听默认的http 8080端口。所以我们使用kubectl get nodes会报The connection to the server localhost:8080 was refused - did you specify the right host or port?。
-查看kube-apiserver的监听端口可以看到只监听了https的6443端口，
+
+**注意**到kube-apiserver的选项--insecure-port=0，也就是说kubeadm 1.6.0初始化的集群，kube-apiserver没有监听默认的http 8080端口。所以我们使用kubectl get nodes会报
+**The connection to the server localhost:8080 was refused - did you specify the right host or port?。 **   
+
+查看kube-apiserver的监听端口可以看到只监听了https的6443端口
 	netstat -nltp | grep apiserver
 	tcp6       0      0 :::6443                 :::\*                    LISTEN      9831/kube-apiserver
 为了使用kubectl访问apiserver，在/.bash\_profile中追加下面的环境变量：
-export KUBECONFIG=/etc/kubernetes/admin.conf
-source /.bash\_profile
+	export KUBECONFIG=/etc/kubernetes/admin.conf
+	source ~/.bash\_profile
 此时kubectl命令在master node上就好用了，查看一下当前机器中的Node：
 	kubectl get nodes
 	NAME      STATUS     AGE       VERSION
@@ -205,12 +209,17 @@ source /.bash\_profile
 
 #### 安装Pod Network
 接下来安装flannel network add-on：
-kubectl create -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
+kubectl create -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml     
+
 kubectl apply -f  https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
 serviceaccount "flannel" created
-configmap "kube-flannel-cfg" created
-daemonset "kube-flannel-ds" created
-	如果Node有多个网卡的话，参考flannel issues 39701，目前需要在kube-flannel.yml中使用--iface参数指定集群主机内网网卡的名称，否则可能会出现dns无法解析。需要将kube-flannel.yml下载到本地，flanneld启动参数加上--iface=<iface-name>
+
+configmap "kube-flannel-cfg" created     
+daemonset "kube-flannel-ds" created     
+
+如果Node有多个网卡的话，参考flannel issues 39701，目前需要在kube-flannel.yml中使用--iface参数指定集群主机内网网卡的名称，否则可能会出现dns无法解析。需要将kube-flannel.yml下载到本地，flanneld启动参数加上--iface=\<iface-name\>
+
 	......
 	apiVersion: extensions/v1beta1
 	kind: DaemonSet
@@ -219,9 +228,9 @@ daemonset "kube-flannel-ds" created
 	......
 	containers:
 	name: kube-flannel
-		image: quay.io/coreos/flannel:v0.7.0-amd64
-		command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr", "--iface=eth1" ]
-		......
+	image: quay.io/coreos/flannel:v0.7.0-amd64
+	command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr", "--iface=eth1" ]
+	......
 
 使用kubectl get pod --all-namespaces -o wide确保所有的Pod都处于Running状态。
 `kubectl get pod --all-namespaces -o wide`
@@ -267,10 +276,10 @@ kubectl delete deploy curl
 	
 	Node join complete:
 	Certificate signing request sent to master and response
-		  received.
-		Kubelet informed of new secure connection details.
-		
-		Run 'kubectl get nodes' on the master to see this machine join.
+	  received.
+	Kubelet informed of new secure connection details.
+	
+	Run 'kubectl get nodes' on the master to see this machine join.
 
 查看集群中节点：
 	kubectl get nodes
