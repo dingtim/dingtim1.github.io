@@ -77,6 +77,7 @@ rbd image 'jdk-image':
 monitors: 就是ceph的mon，有几个写几个
 ```
 	apiVersion: v1
+
 	kind: PersistentVolume
 	metadata:
   		name: jdk-pv
